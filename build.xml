@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="microframework-lumen" default="build" basedir=".">
+ <property name="basedir" value="${project.basedir}"/>
+ <property name="toolsdir" value="${basedir}/vendor/bin/"/>
+
  <target name="build"
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
 
@@ -124,9 +127,12 @@
   </exec>
  </target>
 
- <target name="phpdox" description="Generate API documentation using phpDox">
-  <echo msg="Generating API documentation..."/> 
-  <exec executable="${project.basedir}/vendor/bin/phpdox"/>
+ <target name="phpdox"
+         unless="phpdox.done"
+         depends=""
+         description="Generate project documentation using phpDox">
+  <exec executable="${toolsdir}phpdox" dir="${basedir}/build" taskname="phpdox"/>
+  <property name="phpdox.done" value="true"/>
  </target>
 
  <target name="phpunit" description="Run unit tests with PHPUnit">
